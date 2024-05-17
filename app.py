@@ -6,7 +6,7 @@ from PIL import Image
 import numpy as np
 
 # Load the trained model
-model = load_model('cifar10_model.h5')
+model = load_model('cifar10_model.h5.h5')
 
 # Class names for CIFAR-10 dataset
 class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
@@ -18,19 +18,23 @@ st.title('CIFAR-10 Image Classification')
 uploaded_file = st.file_uploader("Choose an image...", type="jpg")
 
 if uploaded_file is not None:
-    # Display the uploaded image
-    image = Image.open(uploaded_file)
-    st.image(image, caption='Uploaded Image', use_column_width=True)
+    try:
+        # Display the uploaded image
+        image = Image.open(uploaded_file)
+        st.image(image, caption='Uploaded Image', use_column_width=True)
 
-    # Preprocess the image
-    image = image.resize((32, 32))
-    image = img_to_array(image)
-    image = image.astype('float32') / 255.0
-    image = np.expand_dims(image, axis=0)
+        # Preprocess the image
+        image = image.resize((32, 32))  # Resize image to 32x32 pixels
+        image = img_to_array(image)     # Convert image to array
+        image = image.astype('float32') / 255.0  # Normalize the image to [0, 1]
+        image = np.expand_dims(image, axis=0)    # Add batch dimension
 
-    # Make a prediction
-    prediction = model.predict(image)
-    predicted_class = class_names[np.argmax(prediction)]
+        # Make a prediction
+        prediction = model.predict(image)
+        predicted_class = class_names[np.argmax(prediction)]
 
-    # Display the prediction
-    st.write(f'Predicted Class: {predicted_class}')
+        # Display the prediction
+        st.write(f'Predicted Class: {predicted_class}')
+    
+    except Exception as e:
+        st.error(f"Error in processing the image: {e}")
