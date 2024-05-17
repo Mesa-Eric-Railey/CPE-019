@@ -9,7 +9,7 @@ import numpy as np
 @st.cache(allow_output_mutation=True)
 def load_keras_model():
     try:
-        model = load_model('cifar10_model.h5')  # Update the filepath if necessary
+        model = load_model('cifar10_model_new.h5')  # Update the filepath if necessary
         return model
     except OSError as e:
         st.error(f"Error loading Keras model: {e}")
